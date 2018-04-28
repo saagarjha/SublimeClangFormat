@@ -336,3 +336,16 @@ class clangFormatSelectStyleCommand(sublime_plugin.WindowCommand):
         except ValueError:
             sel = 0
         active_window.show_quick_panel(styles, self.done, 0, sel)
+
+
+class clangFormatSetFormatOnSaveCommand(sublime_plugin.WindowCommand):
+    def done(self, i):
+        settings = sublime.load_settings(settings_file)
+        settings.set("format_on_save", i == 0)
+        sublime.save_settings(settings_file)
+
+    def run(self):
+        load_settings()
+        active_window = sublime.active_window()
+        sel = 0 if format_on_save else 1
+        active_window.show_quick_panel(["On", "Off"], self.done, 0, sel)
